@@ -1,10 +1,9 @@
 import PySimpleGUI as sg   
-from generatetimes import generateUrls
-from async_url import getUrl
+from generateurls import generate_url_list
+from async_url import get_correct_url
 
 sg.theme('Dark Black')
 
-# 1- the layout
 layout = [
         [sg.Frame(layout=[
             [sg.Text('Video ID:'), sg.Input(key='videoid')],
@@ -14,12 +13,10 @@ layout = [
 
         [sg.Button('Exit')]]
 
-# 2 - the window
-window = sg.Window('Live.me M3u8 URL -- by tetudin', layout, finalize=True)
+window = sg.Window('Live.me M3u8 URL - by tetudin', layout, finalize=True)
 
 window['m3u8url'].update(disabled=True)
 
-# 3 - the event loop
 while True:
     event, values = window.read()
 
@@ -30,8 +27,8 @@ while True:
         videoid = values['videoid']
         try:
             if videoid.isdecimal():
-                urls = generateUrls(videoid)
-                correct_url = getUrl(urls)
+                urls = generate_url_list(videoid)
+                correct_url = get_correct_url(urls)
                 window['m3u8url'].update(correct_url)
             else:
                 raise Exception

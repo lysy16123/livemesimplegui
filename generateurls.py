@@ -1,7 +1,8 @@
 import datetime, requests
 import pytz
 
-def generate_url(vdoid):
+#generate date from vtime and change to liveme(vod.oc) timezone
+def generate_date(vdoid):
     response = requests.get('https://lvapi.liveme.com/live/queryinfo?h5=1&videoid=%s&vali=BktwlkCebmtmWRp' % vdoid)
     dados = response.json()
     vtime = dados['data']['video_info']['vtime']
@@ -13,8 +14,9 @@ def generate_url(vdoid):
 
     return data
 
-def generateUrls(vdoid):
-    start_date = generate_url(vdoid)
+#returns a list of "probable" urls from the returned date, from the old url and the new url, adding 1 second and stops at +10 seconds 
+def generate_url_list(vdoid):
+    start_date = generate_date(vdoid)
     end_date = start_date + datetime.timedelta(seconds=10)
 
     urls = []
