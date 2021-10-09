@@ -29,6 +29,8 @@ while True:
             if videoid.isdecimal():
                 urls = generate_url_list(videoid)
                 correct_url = get_correct_url(urls)
+                if not videoid in correct_url:
+                    raise Exception
                 window['m3u8url'].update(correct_url)
             else:
                 raise Exception
@@ -36,6 +38,4 @@ while True:
             print (e)
             window['m3u8url'].update("Error, check video id.")
 
-
-# 4 - the close
 window.close()
