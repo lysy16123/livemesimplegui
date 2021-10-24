@@ -17,24 +17,26 @@ def generate_date(vdoid):
 #returns a list of "probable" urls from the returned date, from the old url and the new url, adding 1 second and stops at +10 seconds 
 def generate_url_list(vdoid):
     start_date = generate_date(vdoid)
-    end_date = start_date + datetime.timedelta(seconds=10)
+    end_date = start_date + datetime.timedelta(seconds=20)
 
     urls = []
 
-    fixed_urls = ['http://vod.oc.linkv.fun/yolo-', 'http://record.linkv.fun/oc/yolo-']
+    if datetime.datetime.timestamp(start_date) < 1630986656:
+        fixed_url = 'http://record.linkv.fun/oc/yolo-'
+    else:
+        fixed_url = 'http://vod.oc.linkv.fun/yolo-'
 
     delta = datetime.timedelta(seconds=1)
     
-    for orig_url in fixed_urls:
-        if 'record' in orig_url:
-            sdate = start_date.astimezone(tz=pytz.timezone("GMT"))
-        else:
-            sdate = start_date
-        edate = end_date
-        while sdate <= edate:
-            datastr = sdate.strftime("%Y%m%d%H%M%S")
-            final_url = "%s%s--%s.m3u8" % (orig_url, vdoid, datastr)
-            urls.append(final_url)
-            sdate += delta
+    if 'record' in fixed_url:
+        sdate = start_date.astimezone(tz=pytz.timezone("GMT"))
+    else:
+        sdate = start_date
+    edate = end_date
+    while sdate <= edate:
+        datastr = sdate.strftime("%Y%m%d%H%M%S")
+        final_url = "%s%s--%s.m3u8" % (fixed_url, vdoid, datastr)
+        urls.append(final_url)
+        sdate += delta
 
     return urls
